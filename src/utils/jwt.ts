@@ -5,8 +5,7 @@ export function getUserFromToken(token: string): {
   id: number
   iat: EpochTimeStamp
 } {
-  const data: any = jwt.decode(token, import.meta.env.TOKEN_SECRET)
-
+  const data: any = jwt.decode(token)
   return { id: data?.id, name: data?.name, iat: data?.iat }
 }
 

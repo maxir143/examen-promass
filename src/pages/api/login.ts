@@ -8,7 +8,7 @@ import { getTokenFromUser } from "../../utils"
 export const POST: APIRoute = async ({ request }) => {
   const { user, password } = await request.json()
 
-  // No admitir capos vacios
+  // No admitir capos vacíos
   if (!user || !password) {
     return new Response(null, { status: 400 })
   }
@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request }) => {
   const userFromDB = await db.select().from(users).where(eq(users.name, user))
 
   if (userFromDB.length > 0) {
-    // comprobar contrasenas
+    // comprobar contraseñas
     const auth = await bcrypt.compare(password, userFromDB[0].password)
 
     if (auth) {
@@ -32,13 +32,13 @@ export const POST: APIRoute = async ({ request }) => {
         })
       )
     }
-    // regresar error de contrasena
+    // regresar error de contraseña
     return new Response(JSON.stringify({ message: "contrasena incorrecta" }), {
       status: 400,
     })
   }
 
-  // hash para la contrasena
+  // hash para la contraseña
   const salt = await bcrypt.genSalt(10)
   const hashPassword = await bcrypt.hash(password, salt)
 
