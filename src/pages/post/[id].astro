@@ -1,0 +1,45 @@
+---
+import { eq } from "drizzle-orm"
+import { db, posts, users } from "../../db"
+import Main from "../../layouts/main.astro"
+import { parseShortDate } from "../../utils"
+
+const { id = "" } = Astro.params
+
+const postId = parseInt(id)
+
+if (Number.isNaN(postId)) {
+  return Astro.redirect("/")
+}
+
+const post = await db
+  .select()
+  .from(posts)
+  .where(eq(posts?.id, postId))
+  .leftJoin(users, eq(posts.authorId, users.id))
+  .then(
+    (res) =>
+      res.map(({ posts, users }) => ({
+        ...posts,
+        author: users?.name,
+      }))?.[0],
+  )
+
+if (!post) {
+  return Astro.redirect("/")
+}
+---
+
+<Main>
+  <div class="flex flex-col gap-6 max-w-[800px] p-5">
+    <div class="flex justify-between gap-3">
+      <h2 class="text-5xl">{post.title}</h2>
+      <a href="/" class="btn dark:btn-outline">{"< Regresar"}</a>
+    </div>
+    <div class="flex justify-between gap-3">
+      <p>{post?.author ?? "anónimo"}</p>
+      <p>{parseShortDate(post.date)}</p>
+    </div>
+    <p>{post.content}</p>
+  </div>
+</Main>

@@ -1,0 +1,55 @@
+---
+import { db, posts, users } from "../db"
+import { BotonSesion, BarraDeBusqueda,ListaEntradas } from "../components"
+import Main from "../layouts/main.astro"
+import { desc, eq, like, or } from "drizzle-orm"
+
+const search = Astro.url.searchParams.get("search") || ""
+
+const allPosts = await db
+  .select()
+  .from(posts)
+  .where(
+    or(like(posts.content, `%${search}%`), like(posts.title, `%${search}%`)),
+  )
+  .leftJoin(users, eq(posts.authorId, users.id))
+  .orderBy(desc(posts.date))
+  .then((response) =>
+    response.map(({ posts, users }) => ({ ...posts, author: users?.name })),
+  )
+  .catch((e) => {
+    console.error(`Error al consultar posts:  ${e?.message}`)
+  })
+---
+
+<Main>
+  <main class="w-96 flex flex-col gap-8">
+    <div class="flex gap-3">
+      <BarraDeBusqueda defaultValue={search} client:load />
+      {
+        search && (
+          <a href="/" class="btn btn-circle dark:btn-outline btn-error text-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </a>
+        )
+      }
+    </div>
+    <BotonSesion client:load />
+    <div class="max-h-[70vh] overflow-y-auto p-3">
+      <ListaEntradas entradas={allPosts ?? []} client:load />
+    </div>
+  </main>
+</Main>

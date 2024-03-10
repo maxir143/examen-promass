@@ -1,0 +1,13 @@
+---
+import { NuevaEntrada } from "../components/nueva-entrada"
+import Main from "../layouts/main.astro"
+---
+
+<Main>
+  <div class="w-96">
+    <div class="flex w-full justify-end pb-5">
+      <a href="/" class="btn dark:btn-outline btn-sm">{"< Regresar"}</a>
+    </div>
+    <NuevaEntrada client:load />
+  </div>
+</Main>
