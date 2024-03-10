@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken"
 
-export function getUserFromToken(token: string): {
+export function getUserFromToken(token?: string): Partial<{
   name: string
   id: number
   iat: EpochTimeStamp
-} {
+}> {
+  if (!token) return {}
   const data: any = jwt.decode(token)
   return { id: data?.id, name: data?.name, iat: data?.iat }
 }

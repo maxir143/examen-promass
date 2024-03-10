@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm"
 import { db, posts, users } from "../../db"
 import Main from "../../layouts/main.astro"
 import { parseShortDate } from "../../utils"
+import { BotonEliminarPost } from "../../components"
 
 const { id = "" } = Astro.params
 
@@ -26,7 +27,7 @@ const post = await db
       }))?.[0],
   )
 
-// si no se encuentra el post dirigir al usuario al inicio 
+// si no se encuentra el post dirigir al usuario al inicio
 if (!post) {
   return Astro.redirect("/")
 }
@@ -36,7 +37,10 @@ if (!post) {
   <div class="flex flex-col gap-6 max-w-[800px] p-5">
     <div class="flex justify-between gap-3">
       <h2 class="text-5xl">{post.title}</h2>
-      <a href="/" class="btn dark:btn-outline">{"< Regresar"}</a>
+      <div class="flex gap-2">
+        <a href="/" class="btn dark:btn-outline">{"< Regresar"}</a>
+        <BotonEliminarPost id={post.id} client:load/>
+      </div>
     </div>
     <div class="flex justify-between gap-3">
       <p>{post?.author ?? "anónimo"}</p>

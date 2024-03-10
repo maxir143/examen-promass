@@ -32,7 +32,7 @@ export function NuevaEntrada() {
       validateOnChange
       onSubmit={(values: NewPost, { setSubmitting }) => {
         setSubmitting(true)
-        fetch("api/posts", {
+        fetch("/api/posts", {
           method: "POST",
           body: JSON.stringify({
             ...values,
