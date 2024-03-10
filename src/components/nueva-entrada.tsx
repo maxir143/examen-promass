@@ -10,12 +10,12 @@ type NewPost = {
 const validationSchema = object({
   title: string()
     .required("campo requerido.")
-    .min(1, "minimo 1 caracter.")
-    .max(100, "maximo 100 caracteres."),
+    .min(1, "mínimo 1 carácter.")
+    .max(100, "máximo 100 caracteres."),
   content: string()
     .required("campo requerido.")
-    .min(100, "minimo 100 caracteres.")
-    .max(10000000, "maximo 10000000 caracteres."),
+    .min(100, "mínimo 100 caracteres.")
+    .max(10000000, "máximo 10000000 caracteres."),
 })
 
 export function NuevaEntrada() {

@@ -24,29 +24,7 @@ const allPosts = await db
 
 <Main>
   <main class="w-96 flex flex-col gap-8">
-    <div class="flex gap-3">
-      <BarraDeBusqueda defaultValue={search} client:load />
-      {
-        search && (
-          <a href="/" class="btn btn-circle dark:btn-outline btn-error text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </a>
-        )
-      }
-    </div>
+    <BarraDeBusqueda defaultValue={search} client:load />
     <BotonSesion client:load />
     <div class="max-h-[70vh] overflow-y-auto p-3">
       <ListaEntradas entradas={allPosts ?? []} client:load />
