@@ -13,7 +13,7 @@ Blog en cumplimiento con los siguientes requisitos:
 - [ ] ~~Extra - Modo offline~~
 
 #### Recursos utilizados para el desarrollo: 
-- [Base de datos SQL](https://www.freesqldatabase.com)
+- [Base de datos SQL](https://www.freesqldatabase.com) [^1]
 - ORM [drizzle](https://orm.drizzle.team/)
 - Framework [Astro](https://astro.build/)
 - Datos de usuario locales con [JWT](https://jwt.io/)
@@ -40,3 +40,5 @@ Blog en cumplimiento con los siguientes requisitos:
   npm run dev
 ```
 4. abrir proyecto en el navegador: [http://localhost:4321/](http://localhost:4321/)
+
+[^1]: La base de datos que se usa para el proyecto es gratuita por lo que podría presentar intermitencia, si se gusta probar con una base local, es una base MySQL los comandos de tablas de encuentra en: "drizzle/0000_deep_plazm.sql" y se puede ingresar la información del servidor local por medio del archivo .env.
