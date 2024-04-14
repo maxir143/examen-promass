@@ -33,13 +33,17 @@ export function InicioSesion() {
             body: JSON.stringify(values),
           })
             .then(async (res: any) => {
-              const { message = "", token } = await res.json()
-              setMessage(message)
-              if (token) {
-                // salvar token en localStorage
-                localStorage.setItem("token", token)
-                location.href = "/"
+              if (res.ok) {
+                const { token } = await res.json()
+                if (token) {
+                  // salvar token en localStorage
+                  localStorage.setItem("token", token)
+                  location.href = "/"
+                }
+                return
               }
+              const message = await res.text()
+              setMessage(message)
             })
             .catch(() => {})
             .finally(() => {

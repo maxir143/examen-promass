@@ -41,12 +41,11 @@ export function NuevaEntrada() {
         })
           .then(async (res: any) => {
             if (res.ok) return (location.href = "/")
-            const { message } = await res.json()
+            const message = await res.text()
             setMessage(message)
           })
           .catch(() => {
             setMessage("error al publicar post")
-            console.error("error al publicar post")
           })
           .finally(() => {
             setSubmitting(false)

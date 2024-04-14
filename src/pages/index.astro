@@ -19,8 +19,8 @@ const allPosts: any = await db
       author: Users?.name,
     }))
   })
-  .catch((e: any) => {
-    console.error(`Error al consultar posts:  ${e?.message}`)
+  .catch(() => {
+    console.error("Error al consultar posts.")
   })
 ---
 

@@ -30,12 +30,13 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           token,
-        })
+        }),
+        { status: 200 }
       )
     }
     // regresar error de contraseña
-    return new Response(JSON.stringify({ message: "contraseña incorrecta" }), {
-      status: 400,
+    return new Response("Contraseña incorrecta.", {
+      status: 401,
     })
   }
 
@@ -60,13 +61,14 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           token,
-        })
+        }),
+        { status: 201 }
       )
     })
     .catch((e: any) => {
       console.error(e?.message)
-      return new Response(JSON.stringify({ message: e?.message }), {
-        status: 400,
+      return new Response("Error al registrar.", {
+        status: 500,
       })
     })
 }
