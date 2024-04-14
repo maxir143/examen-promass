@@ -2,7 +2,7 @@
 import { db, Posts, Users, eq } from "astro:db"
 import Main from "../../layouts/main.astro"
 import { parseShortDate } from "../../utils"
-import { BotonEliminarPost } from "../../components"
+import { BotonEliminarPost, ChevronLeft } from "../../components"
 
 const { id = "" } = Astro.params
 
@@ -34,15 +34,18 @@ if (!post) {
 <Main>
   <section class="flex items-center justify-center min-w-full">
     <div class="max-w-[800px] flex flex-col flex-grow gap-6 p-5">
-      <div class="flex justify-between gap-3">
+      <div class="flex flex-wrap-reverse justify-between gap-3">
         <h2 class="text-5xl">{post.title}</h2>
-        <div class="flex gap-2">
-          <a href="/" class="btn dark:btn-outline">{"< Regresar"}</a>
+        <div class="flex gap-2 justify-end flex-grow">
           <BotonEliminarPost
             id={post.id}
             authorId={post.authorId}
             client:load
           />
+          <a href="/" class="btn btn-sm dark:btn-outline">
+            <ChevronLeft />
+            {"Regresar"}</a
+          >
         </div>
       </div>
       <div class="flex justify-between gap-3">

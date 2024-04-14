@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro"
 import { getUserFromToken } from "../../utils/jwt"
-import { Posts, db, eq, and } from "astro:db"
+import { Posts, db, eq, and, Users, or, like, desc } from "astro:db"
 
 export const POST: APIRoute = async ({ request }) => {
   const { content, title, token } = await request.json()
@@ -60,4 +60,29 @@ export const DELETE: APIRoute = async ({ request }) => {
       return new Response("Eliminado exitosamente.", { status: 200 })
     })
     .catch(() => new Response("Error al eliminar post.", { status: 500 }))
+}
+
+export const GET: APIRoute = async ({ url }) => {
+  const search = url.searchParams.get("search") || ""
+  console.log(search)
+  const posts = await db
+    .select()
+    .from(Posts)
+    .where(
+      or(like(Posts.content, `%${search}%`), like(Posts.title, `%${search}%`))
+    )
+    .leftJoin(Users, eq(Posts.authorId, Users.id))
+    .orderBy(desc(Posts.date))
+    .then((response: any) => {
+      return response.map(({ Posts, Users }: { Posts: any; Users: any }) => ({
+        ...Posts,
+        author: Users?.name,
+      }))
+    })
+    .catch(() => new Response("Error al eliminar post.", { status: 500 }))
+  if (posts.length == 0) {
+    return new Response("No se encontraron resultados.", { status: 404 })
+  }
+
+  return new Response(JSON.stringify(posts), { status: 200 })
 }

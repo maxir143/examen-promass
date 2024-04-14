@@ -28,7 +28,7 @@ export function InicioSesion() {
         }}
         onSubmit={(values: Values, { setSubmitting }) => {
           setMessage("")
-          fetch("api/login", {
+          fetch("/api/login", {
             method: "POST",
             body: JSON.stringify(values),
           })
