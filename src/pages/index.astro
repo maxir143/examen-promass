@@ -1,34 +1,26 @@
 ---
 import { BotonSesion, BarraDeBusqueda, ListaEntradas } from "../components"
 import Main from "../layouts/main.astro"
-import { db, Posts, Users, or, like, eq, desc } from "astro:db"
 
+const searchURL = new URL("http://localhost:4321/api/posts")
 const search = Astro.url.searchParams.get("search") || ""
+searchURL.searchParams.append("search", search)
 
-const allPosts: any = await db
-  .select()
-  .from(Posts)
-  .where(
-    or(like(Posts.content, `%${search}%`), like(Posts.title, `%${search}%`))
-  )
-  .leftJoin(Users, eq(Posts.authorId, Users.id))
-  .orderBy(desc(Posts.date))
-  .then((response: any) => {
-    return response.map(({ Posts, Users }: { Posts: any; Users: any }) => ({
-      ...Posts,
-      author: Users?.name,
-    }))
-  })
-  .catch(() => {
-    console.error("Error al consultar posts.")
-  })
+const allPosts: any = await fetch(searchURL).then(async (res) => {
+  if (res.ok) {
+    return await res.json()
+  }
+  return []
+})
 ---
 
 <Main>
-  <main class="w-96 flex flex-col gap-8">
-    <BarraDeBusqueda defaultValue={search} client:load />
-    <BotonSesion client:load />
-    <div class="max-h-[70vh] overflow-y-auto p-3">
+  <main class="flex flex-col gap-5 max-w-96">
+    <div class="flex flex-col gap-3 pt-3">
+      <BarraDeBusqueda defaultValue={search} client:load />
+      <BotonSesion client:load />
+    </div>
+    <div class="flex-grow overflow-y-auto p-3 max-h-[80vh]">
       <ListaEntradas entradas={allPosts ?? []} client:load />
     </div>
   </main>

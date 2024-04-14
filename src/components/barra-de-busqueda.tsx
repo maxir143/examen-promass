@@ -1,11 +1,16 @@
 import React from "react"
 import { useSearchBar } from "../hooks"
-import { IconoTache } from "./iconos/icono-tache"
-import { IconoLupa } from "./iconos/icono-lupa"
+import { IconoTache, IconoLupa } from "./iconos"
 
 export function BarraDeBusqueda({ defaultValue }: { defaultValue: string }) {
   const { searchWord, setSearchWord } = useSearchBar(defaultValue, (word) => {
-    word != defaultValue && (location.href = "?search=" + word)
+    if (word != defaultValue) {
+      if (word == "") {
+        location.href = "/"
+      } else {
+        location.href = "?search=" + word
+      }
+    }
   })
 
   return (

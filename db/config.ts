@@ -21,7 +21,7 @@ const Users = defineTable({
   },
 })
 
-// https://astro.build/db/config
+
 export default defineDb({
   tables: { Posts, Users },
 })

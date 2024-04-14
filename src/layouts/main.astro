@@ -1,15 +1,17 @@
 ---
-const { content } = Astro.props;
+const { content } = Astro.props
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-		<title>{content?.title ?? "Grupo promass"}</title>
-	</head>
-	<body class="grid place-items-center min-h-screen content-center">
-		<slot />
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <title>{content?.title ?? "Grupo promass"}</title>
+  </head>
+  <body
+    class="flex justify-center place-items-center min-h-screen min-w-full px-3"
+  >
+    <slot />
+  </body>
 </html>

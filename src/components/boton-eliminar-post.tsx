@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { IconoTache } from "."
+import { Trash } from "."
 import { useToken } from "../hooks"
 
 export function BotonEliminarPost({
@@ -57,9 +57,9 @@ export function BotonEliminarPost({
         disabled={fetching}
         aria-busy={fetching}
         onClick={() => handleDelete(id)}
-        className="btn btn-square dark:btn-outline btn-error text-white"
+        className="btn btn-sm btn-square dark:btn-outline btn-error text-white"
       >
-        <IconoTache />
+        <Trash />
       </button>
     </>
   )
