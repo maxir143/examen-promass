@@ -1,8 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import React, { useState } from "react"
 import { object, string } from "yup"
-import { IconoUsuario } from "./iconos/icono-usuario"
-import { IconoLLave } from "./iconos/icono-llave"
+import { IconoUsuario, IconoLLave } from "./iconos"
 
 type Values = {
   user: string

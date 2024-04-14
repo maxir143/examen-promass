@@ -6,6 +6,8 @@ dist/
 
 # dependencies
 node_modules/
+.vscode
+.astro/
 
 # logs
 npm-debug.log*

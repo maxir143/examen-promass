@@ -1,9 +1,16 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { IconoTache } from "."
 import { useToken } from "../hooks"
 
-export function BotonEliminarPost({ id }: { id: number }) {
+export function BotonEliminarPost({
+  id,
+  authorId,
+}: {
+  id: number
+  authorId: number
+}) {
   const [fetching, setFetching] = useState<boolean>(false)
+  const [userId, setUserId] = useState<number | null>(null)
   const { token } = useToken()
 
   async function handleDelete(id: number) {
@@ -24,6 +31,25 @@ export function BotonEliminarPost({ id }: { id: number }) {
         setFetching(false)
       })
   }
+
+  useEffect(() => {
+    if (!token) return
+    setFetching(true)
+    fetch("/api/user", {
+      method: "POST",
+      body: JSON.stringify({ token }),
+    })
+      .then(async (res) => {
+        const { id } = await res.json()
+        setUserId(id)
+      })
+      .catch((e: any) => console.error(e?.message))
+      .finally(() => {
+        setFetching(false)
+      })
+  }, [token])
+
+  if (!token || fetching || userId != authorId) return
 
   return (
     <>

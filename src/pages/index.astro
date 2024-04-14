@@ -1,23 +1,25 @@
 ---
-import { db, posts, users } from "../db"
-import { BotonSesion, BarraDeBusqueda,ListaEntradas } from "../components"
+import { BotonSesion, BarraDeBusqueda, ListaEntradas } from "../components"
 import Main from "../layouts/main.astro"
-import { desc, eq, like, or } from "drizzle-orm"
+import { db, Posts, Users, or, like, eq, desc } from "astro:db"
 
 const search = Astro.url.searchParams.get("search") || ""
 
-const allPosts = await db
+const allPosts: any = await db
   .select()
-  .from(posts)
+  .from(Posts)
   .where(
-    or(like(posts.content, `%${search}%`), like(posts.title, `%${search}%`)),
+    or(like(Posts.content, `%${search}%`), like(Posts.title, `%${search}%`))
   )
-  .leftJoin(users, eq(posts.authorId, users.id))
-  .orderBy(desc(posts.date))
-  .then((response) =>
-    response.map(({ posts, users }) => ({ ...posts, author: users?.name })),
-  )
-  .catch((e) => {
+  .leftJoin(Users, eq(Posts.authorId, Users.id))
+  .orderBy(desc(Posts.date))
+  .then((response: any) => {
+    return response.map(({ Posts, Users }: { Posts: any; Users: any }) => ({
+      ...Posts,
+      author: Users?.name,
+    }))
+  })
+  .catch((e: any) => {
     console.error(`Error al consultar posts:  ${e?.message}`)
   })
 ---

@@ -1,20 +1,21 @@
 import type { APIRoute } from "astro"
 import bcrypt from "bcrypt"
-import { db } from "../../db/connection"
-import { users } from "../../db/schema"
-import { eq } from "drizzle-orm"
 import { getTokenFromUser } from "../../utils"
+import { Users, eq, db } from "astro:db"
 
 export const POST: APIRoute = async ({ request }) => {
-  const { user, password } = await request.json()
+  const { user: userName, password } = await request.json()
 
   // No admitir capos vacíos
-  if (!user || !password) {
+  if (!userName || !password) {
     return new Response(null, { status: 400 })
   }
 
   // buscar si el usuario ya existe
-  const userFromDB = await db.select().from(users).where(eq(users.name, user))
+  const userFromDB = await db
+    .select()
+    .from(Users)
+    .where(eq(Users.name, userName))
 
   if (userFromDB.length > 0) {
     // comprobar contraseñas
@@ -33,7 +34,7 @@ export const POST: APIRoute = async ({ request }) => {
       )
     }
     // regresar error de contraseña
-    return new Response(JSON.stringify({ message: "contrasena incorrecta" }), {
+    return new Response(JSON.stringify({ message: "contraseña incorrecta" }), {
       status: 400,
     })
   }
@@ -44,10 +45,13 @@ export const POST: APIRoute = async ({ request }) => {
 
   // registrar usuario
   return await db
-    .insert(users)
-    .values({ name: user, password: hashPassword })
+    .insert(Users)
+    .values({ name: userName, password: hashPassword })
     .then(async () => {
-      const newUser = await db.select().from(users).where(eq(users.name, user))
+      const newUser = await db
+        .select()
+        .from(Users)
+        .where(eq(Users.name, userName))
       const token = getTokenFromUser({
         id: newUser[0].id,
         name: newUser[0].name,
@@ -59,7 +63,7 @@ export const POST: APIRoute = async ({ request }) => {
         })
       )
     })
-    .catch((e) => {
+    .catch((e: any) => {
       console.error(e?.message)
       return new Response(JSON.stringify({ message: e?.message }), {
         status: 400,

@@ -1,8 +1,6 @@
 import type { APIRoute } from "astro"
 import { getUserFromToken } from "../../utils/jwt"
-import { db } from "../../db/connection"
-import { posts } from "../../db/schema"
-import { and, eq } from "drizzle-orm"
+import { Posts, db, eq, and } from "astro:db"
 
 export const POST: APIRoute = async ({ request }) => {
   const { content, title, token } = await request.json()
@@ -20,7 +18,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   // crear post
   await db
-    .insert(posts)
+    .insert(Posts)
     .values({
       date: new Date(),
       content,
@@ -53,10 +51,10 @@ export const DELETE: APIRoute = async ({ request }) => {
 
   // eliminar post
   return await db
-    .delete(posts)
-    .where(and(eq(posts.id, id), eq(posts.authorId, authorId)))
-    .then((res) => {
-      if (res?.[0].affectedRows == 0) {
+    .delete(Posts)
+    .where(and(eq(Posts.id, id), eq(Posts.authorId, authorId)))
+    .then(({ rowsAffected }: any) => {
+      if (rowsAffected == 0) {
         return new Response(
           JSON.stringify({
             message: "No tienes permiso de eliminar este post",
@@ -67,8 +65,9 @@ export const DELETE: APIRoute = async ({ request }) => {
       return new Response(
         JSON.stringify({
           message: "eliminado exitosamente",
-        })
+        }),
+        { status: 200 }
       )
     })
-    .catch(() => new Response("Error al eliminar post", { status: 400 }))
+    .catch(() => new Response("Error al eliminar post", { status: 500 }))
 }

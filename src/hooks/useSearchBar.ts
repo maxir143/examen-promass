@@ -9,7 +9,7 @@ export function useSearchBar(
   useEffect(() => {
     const timeout = setTimeout(() => {
       callback && callback(searchWord ?? "")
-    }, 500)
+    }, 350)
 
     return () => {
       clearTimeout(timeout)
